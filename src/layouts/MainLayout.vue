@@ -1,106 +1,111 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view='hHh lpR fFf'>
+
+    <q-header elevated class='bg-primary text-white'>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-
         <q-toolbar-title>
-          Quasar App
+          <q-icon name='payments' /> 
+          Despesas
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
     <q-page-container>
-      <router-view />
-    </q-page-container>
+      <q-form
+        @submit='onSubmit'
+        class='q-px-sm'>
+        <div class='q-pa-sm'>
+          <q-date
+            v-model='date'
+            minimal          
+          />
+        </div>
+        <div>
+          <q-input
+            v-model='item'
+            label='Despesa'
+            class='q-py-xs'
+            outlined
+            dense
+          >
+          </q-input>
+        </div>
+        <div>
+          <q-input
+            v-model='amount'
+            label='Valor'
+            class='q-py-xs'
+            type='number'
+            step='0.01'
+            min='0'
+            outlined
+            dense
+          >
+          </q-input>
+        </div>
+        
+        <q-select
+          v-model='method'
+          label='Pagamento'
+          :options='options'
+          outlined
+          dense
+        />
+        
+      </q-form>
+      </q-page-container>
+
+      <div class='q-pt-sm row justify-evenly'>
+        <q-btn
+          @click='save'
+          label='Salvar'
+          color='primary'>
+        </q-btn>
+        <q-btn
+          @click='erase'
+          label='Apagar'
+          >
+        </q-btn>
+      </div>
   </q-layout>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-
 defineOptions({
   name: 'MainLayout'
 })
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
+import { ref } from 'vue'
+import axios from 'axios'
+
+const date = ref(null)
+const item = ref(null)
+const amount = ref(null)
+const method = ref(null)
+
+const options = [
+  'Crédito',
+  'Débito',
+  'PIX',
+  'Dinheiro'
 ]
 
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+const erase = () => {
+  item.value = ''
+  amount.value = ''
+  method.value = ''
 }
+
+const save = () => {
+  const paramsurl = process.env.BASE_URL
+    +'date='+date.value
+    +'&item='+item.value
+    +'&amount='+amount.value
+    +'&method='+method.value
+
+  axios.post(paramsurl)
+    
+  erase()
+}
+
 </script>
