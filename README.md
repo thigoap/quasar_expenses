@@ -1,6 +1,6 @@
 # Expenses (quasar-expenses)
 
-A Quasar Project
+An app to track expenses in google sheets.
 
 ## Install the dependencies
 ```bash

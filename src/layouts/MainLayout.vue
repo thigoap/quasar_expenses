@@ -23,13 +23,24 @@
         <div>
           <q-input
             v-model='item'
-            label='Despesa'
+            label='Item'
             class='q-py-xs'
             outlined
             dense
           >
           </q-input>
         </div>
+        <div>
+          <q-input
+            v-model='category'
+            label='Categoria'
+            class='q-py-xs'
+            outlined
+            dense
+          >
+          </q-input>
+        </div>
+        
         <div>
           <q-input
             v-model='amount'
@@ -51,6 +62,17 @@
           outlined
           dense
         />
+        <q-input
+            v-model='times'
+            label='Parcelas'
+            class='q-py-xs'
+            type='number'
+            step='1'
+            min='1'
+            outlined
+            dense
+          >
+          </q-input>
         
       </q-form>
       </q-page-container>
@@ -80,8 +102,10 @@ import axios from 'axios'
 
 const date = ref(null)
 const item = ref(null)
+const category = ref(null)
 const amount = ref(null)
 const method = ref(null)
+const times = ref(1)
 
 const options = [
   'Crédito',
@@ -92,16 +116,20 @@ const options = [
 
 const erase = () => {
   item.value = ''
+  category.value = ''
   amount.value = ''
   method.value = ''
+  times.value = 1
 }
 
 const save = () => {
   const paramsurl = process.env.BASE_URL
     +'date='+date.value
     +'&item='+item.value
+    +'&category='+category.value
     +'&amount='+amount.value
     +'&method='+method.value
+    +'&times='+times.value
 
   axios.post(paramsurl)
     

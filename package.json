@@ -1,7 +1,7 @@
 {
   "name": "quasar-expenses",
   "version": "0.0.1",
-  "description": "A Quasar Project",
+  "description": "An app to track expenses in google sheets",
   "productName": "Expenses",
   "author": "thigoap <appthigo@gmail.com>",
   "private": true,
